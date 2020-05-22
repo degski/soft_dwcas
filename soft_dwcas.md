@@ -1,11 +1,17 @@
 
 # soft_dwcas
 
-A software implementation of the dwcas (`CMPXCHG16B` on x86)
+
+A software implementation of the dwcas (`CMPXCHG16B` on x86) instruction
 
 Algorithms built around CAS typically read some key memory location and remember the old value. Based on that old value, they compute some new value. Then they try to swap in the new value using CAS, where the comparison checks for the location still being equal to the old value. If CAS indicates that the attempt has failed, it has to be repeated from the beginning: the location is re-read, a new value is re-computed and the CAS is tried again. Instead of immediately retrying after a CAS operation fails, researchers have found that total system performance can be improved in multiprocessor systems—where many threads constantly update some particular shared variable if threads that see their CAS fail use exponential backoff, in other words, wait a little before retrying the CAS.
 
-The actual implementation is surpising and confusing (hence my implementation). It is usefull in developing as mis-using the `CMPXCHG16B` instruction results in an instant crash, while the `soft_dwcas` let's one inspect the values.
+
+
+## soft_dwcas
+
+
+The actual (hardware-)implementation is surpising and confusing (hence `soft_dwcas`, exposing its operation). It is (slightly) usefull in developing as mis-using the `CMPXCHG16B` instruction results in an instant crash, while the `soft_dwcas` let's one inspect results more easily (print-debugging).
 
 
     namespace lockless {
@@ -32,14 +38,15 @@ The actual implementation is surpising and confusing (hence my implementation). 
 
 
 
-## So why this post?
-
 Implementing this little function made me understand the difference between lockless and concurrent (mutex based) programming. I came to some insights I would like to share:
 
 * Mutexes prevent concurrency
 * The only mechanism used in lockless-programming are locks
 * `dwcas` uses 'the data' as a mutex, *intrusive* mutexes
 * as many intrusive mutexes as there are data points
+* `CMPXCHG24B` (fully lockless dl-list) and `CMPXCHG32B`?
+* illustrative
+* below a lockless implementation (for completeness sake)
 
 
 
