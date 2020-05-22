@@ -4,11 +4,13 @@
 
 A software implementation of the dwcas (`CMPXCHG16B` on x86) instruction
 
+
+
 Algorithms built around CAS typically read some key memory location and remember the old value. Based on that old value, they compute some new value. Then they try to swap in the new value using CAS, where the comparison checks for the location still being equal to the old value. If CAS indicates that the attempt has failed, it has to be repeated from the beginning: the location is re-read, a new value is re-computed and the CAS is tried again. Instead of immediately retrying after a CAS operation fails, researchers have found that total system performance can be improved in multiprocessor systems—where many threads constantly update some particular shared variable if threads that see their CAS fail use exponential backoff, in other words, wait a little before retrying the CAS.
 
 
 
-## soft_dwcas
+### soft_dwcas
 
 
 The actual (hardware-)implementation is surpising and confusing (hence `soft_dwcas`, exposing its operation). It is (slightly) usefull in developing as mis-using the `CMPXCHG16B` instruction results in an instant crash, while the `soft_dwcas` let's one inspect results more easily (print-debugging).
@@ -50,7 +52,7 @@ Implementing this little function made me understand the difference between lock
 
 
 
-## dwcas (win/nix/ios)
+### dwcas (win/nix/ios)
 
 
     namespace lockless {
