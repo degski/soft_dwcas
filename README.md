@@ -40,14 +40,16 @@ The actual (hardware-)implementation is surpising and confusing (hence `soft_dwc
 
 
 
-Implementing this little function made me understand the difference between lockless and concurrent (mutex based) programming. I came to some insights I would like to share:
+Implementing this little function made me understand the difference between lockless and concurrent (mutex based) programming:
 
-* Mutexes prevent concurrency
-* The only mechanism used in lockless-programming are locks
+* mutexes prevent concurrency
+* `soft_dwcas implies full serialization (i.e. has no real-world use other than real-world developing)
+* `soft_dwcas` cannot be used to test concurrency itself, just that the mechanics [of lockless progression] work
+* the mechanism used in lockless-programming is locks
 * `dwcas` uses 'the data' as a mutex, *intrusive* mutexes
-* as many intrusive mutexes as there are data points
+* as many intrusive mutexes as there are data points (as compared to 1, or a few)
 * `CMPXCHG24B` (fully lockless dl-list) and `CMPXCHG32B`?
-* illustrative
+* illustrative, a mental model (`CMPXCHG16B` is 'similar' to `soft_dwcas` minus the mutex)
 * below a lockless implementation (for completeness sake)
 
 
