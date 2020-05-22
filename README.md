@@ -40,7 +40,7 @@ The actual (hardware-)implementation is surpising and confusing (hence `soft_dwc
 
 
 
-Implementing this little function made me understand the difference between lockless and concurrent (mutex based) programming:
+Implementing this little function made me understand the difference between lockless and concurrent (mutex based) programming. I've listed in random order some of my thoughts:
 
 * mutexes prevent concurrency
 * `soft_dwcas implies full serialization (i.e. has no real-world use other than real-world developing)
